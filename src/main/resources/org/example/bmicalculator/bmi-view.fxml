@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="493.0" prefWidth="275.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bmicalculator.BMIController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label fx:id="welcomeText" text="Welcome" />
+   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <children>
+         <Label fx:id="weightLabel" text="weightLabel" />
+         <TextField fx:id="weightTextField" />
+         <Label fx:id="heightLabel" text="HeightLabel" />
+         <TextField fx:id="heightTextField" />
+         <Button fx:id="calculateBtn" mnemonicParsing="false" onAction="#onCalculateBMI" text="Calculate">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Button>
+         <Label fx:id="resultLabel" prefHeight="23.0" prefWidth="231.0" text="Result" textAlignment="CENTER" wrapText="true">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+         </Label>
+          <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" text="Error" textAlignment="CENTER" visible="false" />
+         <Separator prefWidth="200.0">
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
+            <padding>
+               <Insets top="10.0" />
+            </padding>
+         </Separator>
+      </children>
+   </VBox>
+   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <children>
+          <Button fx:id="englishBtn" onAction="#onEnglishClicked" text="Hello!">
+            <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin>
+         </Button>
+          <Button fx:id="urduBtn" onAction="#onUrduClicked" text="Hello!">
+            <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin>
+         </Button>
+          <Button fx:id="frenchBtn" onAction="#onFrenchClicked" text="Hello!">
+            <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin>
+         </Button>
+          <Button fx:id="vietnameseBtn" onAction="#onVietnameseClicked" text="Hello!">
+            <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin>
+         </Button>
+          <Label fx:id="timeLabel" text="Current Time: --:--" />
+      </children>
+   </VBox>
+</VBox>
