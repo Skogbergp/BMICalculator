@@ -11,9 +11,15 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class BMIController {
+
+    private Map<String, String> localizedStrings;
+
+    private Locale currentLocale = new Locale("en", "US");
+
 
     @FXML Label errorLabel;
     @FXML private Label resultLabel;
@@ -30,44 +36,40 @@ public class BMIController {
     @FXML private Label welcomeText;
     DecimalFormat df = new DecimalFormat("0.00");
 
-    ResourceBundle rb;
 
     @FXML
     private void initialize() {
-        setLanguage("en","US");
-        if (englishBtn != null || urduBtn != null || frenchBtn != null || vietnameseBtn != null) {
-            setTexts();
-            updateTimeForLocale("en","US");
-
-        }
-
+        setLanguage(currentLocale);
     }
 
-    private void setLanguage(String language,String country) {
-        Locale locale = new Locale(language,country);
-        rb = ResourceBundle.getBundle("MessagesBundle",locale);
-        setTexts();
-        updateTimeForLocale(language,country);
-
+    private void setLanguage(Locale locale) {
+        resultLabel.setText("");
+        localizedStrings = LocalizationService.getLocalizedStrings(locale);
+        weightLabel.setText(localizedStrings.getOrDefault("weight", "Weight"));
+        heightLabel.setText(localizedStrings.getOrDefault("height", "Height"));
+        calculateBtn.setText(localizedStrings.getOrDefault("calculate", "Calculate"));
+        updateTimeForLocale(locale);
+        currentLocale = locale;
     }
 
     @FXML
     private void onEnglishClicked(ActionEvent actionEvent) {
-        setLanguage("en","US");
+        setLanguage(new Locale("en", "US"));
     }
     @FXML
     private void onUrduClicked(ActionEvent actionEvent) {
-        setLanguage("ur","PK");
+        setLanguage(new Locale("ur","PK"));
     }
     @FXML
     private void onFrenchClicked(ActionEvent actionEvent) {
-        setLanguage("fr","FR");
+        setLanguage(new Locale("fr","FR"));
     }
     @FXML
     private void onVietnameseClicked(ActionEvent actionEvent) {
-        setLanguage("vi","VN");
+        setLanguage(new Locale("vi","VN"));
     }
-    private void updateTimeForLocale(String language, String country) {
+    private void updateTimeForLocale(Locale locale) {
+        String country = locale.getCountry();
         String zoneId = "";
         switch (country) {
             case "US" -> zoneId = "America/New_York";
@@ -76,38 +78,26 @@ public class BMIController {
             case "VN" -> zoneId = "Asia/Ho_Chi_Minh";
         }
         ZonedDateTime zonedate = ZonedDateTime.now(ZoneId.of(zoneId));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(rb.getString("time.format"));
-        timeLabel.setText(rb.getString("timelabel.text") +zonedate.format(formatter));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        timeLabel.setText(localizedStrings.getOrDefault("localTime", "Local Time") + " " + formatter.format(zonedate));
     }
     @FXML
     private void onCalculateBMI(ActionEvent actionEvent) {
         errorLabel.setVisible(false);
         try {
-
-            if (!heightTextField.getText().isEmpty() && !weightTextField.getText().isEmpty()) {
-                double height = Double.parseDouble(heightTextField.getText())/100;
-                double weight = Double.parseDouble(weightTextField.getText());
-                double bmi = (weight / Math.pow(height, 2));
-
-                resultLabel.setText(rb.getString("result.text") + " "+df.format(bmi));
-
-            }else{
-                errorLabel.setVisible(true);
-                errorLabel.setText(rb.getString("error.emptyField"));
-            }
-        }catch (NumberFormatException e) {
+            double weight = Double.parseDouble(weightTextField.getText());
+            double height = Double.parseDouble(heightTextField.getText()) / 100.0;
+            double bmi = weight / (height * height);
+            DecimalFormat df = new DecimalFormat("#0.00");
+            resultLabel.setText(localizedStrings.getOrDefault("result", "Your BMI is") + " " + df.format(bmi));
+            // Save to database
+            String language = currentLocale.getLanguage(); // or store current locale
+            BMIResultService.saveResult(weight, height, bmi, language);
+        } catch (NumberFormatException e) {
             errorLabel.setVisible(true);
-            errorLabel.setText(rb.getString("error.number"));
+            errorLabel.setText(localizedStrings.getOrDefault("invalid", "Invalid input"));
         }
-    }
-    private void setTexts(){
-        englishBtn.setText(rb.getString("button1.text"));
-        urduBtn.setText(rb.getString("button2.text"));
-        frenchBtn.setText(rb.getString("button3.text"));
-        vietnameseBtn.setText(rb.getString("button4.text"));
-        welcomeText.setText(rb.getString("label.text"));
-        weightLabel.setText(rb.getString("label.weight.text"));
-        heightLabel.setText(rb.getString("label.height.text"));
-        resultLabel.setText(rb.getString("result.text"));
+
     }
 }

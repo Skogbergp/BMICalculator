@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/07a30ed7-0369-4410-a4e6-12052949d168/console.sql" value="07a30ed7-0369-4410-a4e6-12052949d168" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/bmicalculator/BMIResultService.java" value="07a30ed7-0369-4410-a4e6-12052949d168" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/bmicalculator/LocalizationService.java" value="07a30ed7-0369-4410-a4e6-12052949d168" />
+  </component>
+</project>
